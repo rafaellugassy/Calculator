@@ -9,12 +9,21 @@ namespace Calculator
         static void Main(string[] args)
         {
             String input;
-            Console.WriteLine("Welcome to the calculator application.\nPlease enter an expression. q to quit");
+            Console.WriteLine("Welcome to the calculator application.\nPlease enter an expression. q to quit. help for format guide.");
             input = Console.In.ReadLine();
             while (input != "q")
             {
-                mainExpression = parseExpression(input);
-                Console.WriteLine(mainExpression.ToString() + " = " + mainExpression.execute() + "\nPlease enter an expression. q to quit");
+                if (input == "help")
+                {
+                    Console.WriteLine("EXP\n-> (EXP)\n-> SINGLEOP EXP\n-> EXP DOUBLEOP EXP\n-> VALUE\nSINGLEOP\n-> -, sqrt\n"
+                        + "DOUBLEOP\n-> +, -, *, /, ^\nVALUE\n-> float");
+                }
+                else
+                {
+                    mainExpression = parseExpression(input);
+                    Console.WriteLine(mainExpression.ToString() + " = " + mainExpression.execute() +
+                        "\nPlease enter an expression. q to quit. help for format guide.");
+                }
                 input = Console.In.ReadLine();
             }
         }
@@ -24,7 +33,6 @@ namespace Calculator
         {
             // get number of open brackets
             Stack brackets = new Stack();
-            int numBracket = 0;
             for (int i = 0; i < arg.Length; i++)
             {
                 if (arg[i] == '(')
@@ -46,10 +54,6 @@ namespace Calculator
                             arg = arg.Substring(0, cur) + "exp" + (exp.Count - 1) + arg.Substring(i + 1, arg.Length - (i + 1));
 
                         i = cur + 2 + (exp.Count + "").Length;
-                    }
-                    else if (numBracket < 0)
-                    {
-                        throw new Exception("Error: unmatched closing bracket");
                     }
                 }
             }
